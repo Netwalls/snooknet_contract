@@ -1,6 +1,26 @@
 use starknet::{ContractAddress, contract_address_const};
 // Keeps track of the state of the game
 
+// New PlayerRating model to store player ratings
+#[derive(Copy, Drop, Serde, Introspect)]
+#[dojo::model]
+pub struct PlayerRating {
+    #[key]
+    pub player: ContractAddress,
+    pub rating: u32 // Elo rating
+}
+
+// Trait for PlayerRating operations
+pub trait PlayerRatingTrait {
+    fn new(player: ContractAddress, rating: u32) -> PlayerRating;
+}
+
+impl PlayerRatingImpl of PlayerRatingTrait {
+    fn new(player: ContractAddress, rating: u32) -> PlayerRating {
+        PlayerRating { player, rating }
+    }
+}
+
 #[derive(Serde, Copy, Drop, Introspect, PartialEq)]
 #[dojo::model]
 pub struct GameCounter {
